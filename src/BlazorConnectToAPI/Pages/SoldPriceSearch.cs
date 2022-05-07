@@ -10,7 +10,7 @@ public partial class SoldPriceSearch
 {
     [Inject]
     public IPropertyService PropertyService { get; set; }
-    public IEnumerable<SoldPriceResult> SoldResults { get; set; }
+    public IEnumerable<SoldPriceResult>? SoldResults { get; set; }
 
     public string? Postcode { get; set; }
 
@@ -19,6 +19,8 @@ public partial class SoldPriceSearch
 
     public async void GetResults()
     {
+        SoldResults = null;
+        Message = null; 
         if (!string.IsNullOrWhiteSpace(Postcode))
         {
             await LookupResults();
@@ -37,7 +39,7 @@ public partial class SoldPriceSearch
         try
         {
             var results = await PropertyService.GetSoldPrices(Postcode);
-            var soldPriceResults = results as SoldPriceResult[] ?? results.ToArray();
+            var soldPriceResults = results.OrderByDescending(x=>x.DateOfSale).ToArray();
             if (soldPriceResults.Any())
             {
                 SoldResults = soldPriceResults;
