@@ -1,0 +1,50 @@
+﻿@page "/soldpricesearch"
+
+<h1 class="page-title">Search Property Sold Prices</h1>
+
+<p>
+    <input placeholder="Enter Postcode"
+           @bind="Postcode" class="form-control" />
+    <br />
+    <button class="btn btn-primary" type="submit" onclick="@GetResults">Search</button>
+    
+    @if (Location != null)
+    {
+        <a href=@Location target="_blank" class="btn btn-secondary">Show Location</a>
+    }
+    </p>
+
+@if (SoldResults == null)
+{
+    <p><em>@Message</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Address</th>
+                <th>Sale Date</th>
+                <th>Price</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var soldResult in SoldResults)
+            {
+                <tr>
+                    <td></td>
+                    <td>@soldResult.HouseNumber, @soldResult.Address1, @soldResult.Address2</td>
+                    <td>@soldResult.DateOfSale</td>
+                    <td>@soldResult.Price</td>
+                    <td>
+                        <a href=@soldResult.SaleDetailsUrl target="_blank" class="btn btn-secondary">
+                           Full Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
